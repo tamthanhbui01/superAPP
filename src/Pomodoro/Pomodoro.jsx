@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, Space, Layout, Typography, Input } from "antd";
+import { Button, Space, Layout, Typography, Input, Modal } from "antd";
 const { Text } = Typography;
 function Pomodoro() {
   const [defaultWorkingTime, setDefaultWorkingTime] = useState(5);
@@ -21,7 +21,7 @@ function Pomodoro() {
 
   useEffect(() => {
     if (isPause) return;
-    setTimeout(() => {
+    let time = setTimeout(() => {
       if (currentStatus === "working") {
         if (workingTime === 0) {
           setCurrentStatus("resting");
@@ -42,6 +42,9 @@ function Pomodoro() {
         }
       }
     }, 1000);
+    return () => {
+      clearTimeout(time);
+    };
   }, [
     currentStatus,
     workingTime,
@@ -61,6 +64,7 @@ function Pomodoro() {
     >
       <div>Hello World</div>
       <div>{now.toLocaleTimeString()}</div>
+      <Button onClick={() => {}}>Setting</Button>
 
       <Layout
         className="clock"
@@ -98,7 +102,7 @@ function Pomodoro() {
           <Space>
             <Button
               onClick={() => {
-                setIsPause((prev) => !prev);
+                setIsPause(!isPause);
               }}
             >
               {isPause ? "Start" : "Pause"}
@@ -110,11 +114,13 @@ function Pomodoro() {
                 size="small"
                 onClick={() => {
                   if (currentStatus === "working") {
-                    setWorkingTime(0);
-                    setRestingTime(defaultRestingTime);
-                  } else if (currentStatus === "resting") {
-                    setRestingTime(0);
+                    setCurrentStatus("resting");
                     setWorkingTime(defaultWorkingTime);
+                    setIsPause(!isPause);
+                  } else if (currentStatus === "resting") {
+                    setCurrentStatus("working");
+                    setRestingTime(defaultRestingTime);
+                    setIsPause(!isPause);
                   }
                 }}
               >
