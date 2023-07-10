@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, Space, Layout, Typography, Input, Modal } from "antd";
+import { Button, Space, Layout, Typography, Input, Modal, InputNumber } from "antd";
 const { Text } = Typography;
 function Pomodoro() {
   const [defaultWorkingTime, setDefaultWorkingTime] = useState(5);
@@ -13,14 +13,19 @@ function Pomodoro() {
   const [taskItems, setTaskItems] = useState([]);
   const [addTask, setAddTask] = useState(true);
   const [taskInputValue, setTaskInputValue] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
   useEffect(() => {
     setTimeout(() => {
       setNow(new Date());
     }, 1000);
   }, [now]);
-
+  useEffect(()=>{
+  setWorkingTime(defaultWorkingTime); 
+  setRestingTime(defaultRestingTime);  
+  },[defaultWorkingTime, defaultRestingTime])
   useEffect(() => {
     if (isPause) return;
+    
     let time = setTimeout(() => {
       if (currentStatus === "working") {
         if (workingTime === 0) {
@@ -64,8 +69,28 @@ function Pomodoro() {
     >
       <div>Hello World</div>
       <div>{now.toLocaleTimeString()}</div>
-      <Button onClick={() => {}}>Setting</Button>
-
+      <Button onClick={() => {setIsModalOpen(!isModalOpen)}}>Setting</Button>
+      <Modal open={isModalOpen} 
+             onOk={()=>{setIsModalOpen(false)}}
+             maskClosable={true}
+             onCancel={()=>{setIsModalOpen(false)}}
+             footer={<Button type="primary" onClick={()=>{setIsModalOpen(false)}}>OK</Button>}>   
+        <Space direction="vertical">
+          <Space>Setting</Space>
+          <Space>(icon) Timer</Space>
+          <Space>Time (seconds)</Space>
+          <Space direction="horizontal">
+            <Space direction="vertical">
+              <Space>Pomodoro</Space>
+              <InputNumber value={defaultWorkingTime} min={0} onChange={(e)=>{setDefaultWorkingTime(e)}}></InputNumber>
+            </Space>
+            <Space direction="vertical">
+              <Space>Resting</Space>
+              <InputNumber value={defaultRestingTime} min={0} onChange={(e)=>{setDefaultRestingTime(e)}}></InputNumber>
+            </Space>
+          </Space>
+        </Space>
+      </Modal>
       <Layout
         className="clock"
         style={{
