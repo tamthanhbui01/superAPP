@@ -19,7 +19,6 @@ function App() {
         <Header>
           <Text type="warning">Bui Thanh Tam</Text>
         </Header>
-
         <Layout>
           <Sider className="Sider">
             <Menu

@@ -1,6 +1,19 @@
 import { useState, useEffect } from "react";
-import { Button, Space, Layout, Typography, Input, Modal, InputNumber } from "antd";
-const { Text } = Typography;
+import {
+  Button,
+  Space,
+  Layout,
+  Typography,
+  Input,
+  Modal,
+  InputNumber,
+  Switch,
+  ColorPicker,
+  Dropdown,
+} from "antd";
+import { StepForwardOutlined } from "@ant-design/icons";
+const { Text, Title } = Typography;
+
 function Pomodoro() {
   const [defaultWorkingTime, setDefaultWorkingTime] = useState(5);
   const [defaultRestingTime, setDefaultRestingTime] = useState(3);
@@ -14,18 +27,20 @@ function Pomodoro() {
   const [addTask, setAddTask] = useState(true);
   const [taskInputValue, setTaskInputValue] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [pomodoroColor, setPomodoroColor] = useState("#EA738D");
+  const [shortBreakColor, setShortBreakColor] = useState("#89ABE3");
+  const [isCheck, setIsCheck] = useState(false);
   useEffect(() => {
     setTimeout(() => {
       setNow(new Date());
     }, 1000);
   }, [now]);
-  useEffect(()=>{
-  setWorkingTime(defaultWorkingTime); 
-  setRestingTime(defaultRestingTime);  
-  },[defaultWorkingTime, defaultRestingTime])
+  useEffect(() => {
+    setWorkingTime(defaultWorkingTime);
+    setRestingTime(defaultRestingTime);
+  }, [defaultWorkingTime, defaultRestingTime]);
   useEffect(() => {
     if (isPause) return;
-    
     let time = setTimeout(() => {
       if (currentStatus === "working") {
         if (workingTime === 0) {
@@ -36,7 +51,6 @@ function Pomodoro() {
           setWorkingTime(workingTime - 1);
         }
       }
-
       if (currentStatus === "resting") {
         if (restingTime === 0) {
           setCurrentStatus("working");
@@ -61,32 +75,104 @@ function Pomodoro() {
   return (
     <Layout
       style={{
-        display: "inline-block",
+        display: "flex",
         minWidth: "100%",
         minHeight: "100%",
-        backgroundColor: currentStatus === "working" ? "#EA738D" : "#89ABE3",
+        backgroundColor:
+          currentStatus === "working" ? pomodoroColor : shortBreakColor,
+        textAlign: "center",
+        alignItems: "center",
       }}
     >
-      <div>Hello World</div>
-      <div>{now.toLocaleTimeString()}</div>
-      <Button onClick={() => {setIsModalOpen(!isModalOpen)}}>Setting</Button>
-      <Modal open={isModalOpen} 
-             onOk={()=>{setIsModalOpen(false)}}
-             maskClosable={true}
-             onCancel={()=>{setIsModalOpen(false)}}
-             footer={<Button type="primary" onClick={()=>{setIsModalOpen(false)}}>OK</Button>}>   
+      <Space
+        style={{
+          display: "flex",
+          width: 500,
+          height: 40,
+          justifyContent: "space-between",
+        }}
+      >
+        <Text>(icon) Pomodoro</Text>
+        <Button
+          onClick={() => {
+            setIsModalOpen(!isModalOpen);
+          }}
+        >
+          Setting
+        </Button>
+      </Space>
+
+      <Modal
+        open={isModalOpen}
+        onOk={() => {
+          setIsModalOpen(false);
+        }}
+        maskClosable={true}
+        onCancel={() => {
+          setIsModalOpen(false);
+        }}
+        footer={
+          <Button
+            type="primary"
+            onClick={() => {
+              setIsModalOpen(false);
+            }}
+          >
+            OK
+          </Button>
+        }
+      >
         <Space direction="vertical">
-          <Space>Setting</Space>
-          <Space>(icon) Timer</Space>
-          <Space>Time (seconds)</Space>
+          <Title level={3}>Setting</Title>
+          <Title level={3}>(icon) Timer</Title>
+          <Title level={4}>Time (seconds)</Title>
           <Space direction="horizontal">
             <Space direction="vertical">
-              <Space>Pomodoro</Space>
-              <InputNumber value={defaultWorkingTime} min={0} onChange={(e)=>{setDefaultWorkingTime(e)}}></InputNumber>
+              <Text>Pomodoro</Text>
+              <InputNumber
+                value={defaultWorkingTime}
+                min={0}
+                onChange={(e) => {
+                  setDefaultWorkingTime(e);
+                }}
+              ></InputNumber>
             </Space>
             <Space direction="vertical">
-              <Space>Resting</Space>
-              <InputNumber value={defaultRestingTime} min={0} onChange={(e)=>{setDefaultRestingTime(e)}}></InputNumber>
+              <Text>Short Break</Text>
+              <InputNumber
+                value={defaultRestingTime}
+                min={0}
+                onChange={(e) => {
+                  setDefaultRestingTime(e);
+                }}
+              ></InputNumber>
+            </Space>
+          </Space>
+          <Text>(Theme-icon) Theme</Text>
+          <Space direction="vertical">
+            <Space>
+              <Text>Color Themes:</Text>
+              <ColorPicker
+                value={pomodoroColor}
+                onChange={(e) => {
+                  setPomodoroColor(e.toHexString());
+                }}
+              ></ColorPicker>
+              <ColorPicker
+                value={shortBreakColor}
+                onChange={(e) => {
+                  setShortBreakColor(e.toHexString());
+                }}
+              ></ColorPicker>
+            </Space>
+            <Space>
+              <Text>Dark Mode when running</Text>
+              <Switch
+                checked={isCheck}
+                onChange={() => {
+                  setIsCheck(!isCheck);
+                }}
+              ></Switch>
             </Space>
           </Space>
         </Space>
@@ -94,33 +180,39 @@ function Pomodoro() {
       <Layout
         className="clock"
         style={{
-          backgroundColor: "rgba(255, 255, 255,0.5)",
+          backgroundColor: "rgba(255, 255, 255,0.3)",
+          width: 500,
+          height: 300,
+          borderRadius: "10px",
         }}
       >
-        <Space direction="vertical">
-          <Space>
+        <Space direction="vertical" style={{ paddingTop: "10px" }}>
+          <Space style={{ justifyContent: "space-evenly", width: "200px" }}>
             <Button
               onClick={() => {
-                setCurrentStatus("working");
-                setWorkingTime(defaultWorkingTime);
-                setIsPause(true);
+                if (currentStatus !== "working") {
+                  setCurrentStatus("working");
+                  setWorkingTime(defaultWorkingTime);
+                  setIsPause(true);
+                }
               }}
             >
               Pomodoro
             </Button>
             <Button
               onClick={() => {
-                setCurrentStatus("resting");
-                setRestingTime(defaultRestingTime);
-                setIsPause(true);
+                if (currentStatus !== "resting") {
+                  setCurrentStatus("resting");
+                  setRestingTime(defaultRestingTime);
+                  setIsPause(true);
+                }
               }}
             >
               Resting
             </Button>
           </Space>
           <Space direction="vertical">
-            <Text>{currentStatus}</Text>
-            <Text>
+            <Text style={{ fontSize: 100 }}>
               {currentStatus === "working" ? workingTime : restingTime}
             </Text>
           </Space>
@@ -128,6 +220,9 @@ function Pomodoro() {
             <Button
               onClick={() => {
                 setIsPause(!isPause);
+                if (!isPause && isCheck && currentStatus === "working") {
+                  console.log(pomodoroColor);
+                }
               }}
             >
               {isPause ? "Start" : "Pause"}
@@ -149,7 +244,9 @@ function Pomodoro() {
                   }
                 }}
               >
-                Forward
+                <StepForwardOutlined
+                  style={{ backgroundColor: "rgba(255,255,255,0.3)" }}
+                />
               </Button>
             )}
           </Space>
@@ -160,12 +257,31 @@ function Pomodoro() {
         style={{
           minWidth: "100%",
           height: 100,
+          backgroundColor: "transparent",
+          justifyContent: "center",
         }}
       >
         <Text>Current Task: {currentTask}</Text>
       </Layout>
-      <Layout className="tasksList" style={{ minWidth: "100%", height: 300 }}>
-        <Text>Tasks List</Text>
+      <Layout
+        className="tasksList"
+        style={{
+          minWidth: "100%",
+          height: 300,
+          backgroundColor: "transparent",
+          alignItems: "center",
+        }}
+      >
+        <Space
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: 500,
+          }}
+        >
+          <Text>Tasks List</Text>
+          <Text>Hi</Text>
+        </Space>
         {taskItems.map((item, idx) => (
           <div
             style={{ border: "1px solid black", width: 300 }}
