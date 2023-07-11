@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
-import checkedURL from "../icon/checked-svgrepo-com.svg"
-import forwardURL from "../icon/forward-end-fill-svgrepo-com.svg"
+import checkedURL from "../icon/checked-svgrepo-com.svg";
+import forwardURL from "../icon/forward-end-fill-svgrepo-com.svg";
+import settingURL from "../icon/setting-2-svgrepo-com.svg";
+import addTaskURL from "../icon/plus-circle-svgrepo-com.svg";
+import binURL from "../icon/bin-svgrepo-com.svg";
+import clockURL from "../icon/clock-3-svgrepo-com.svg";
+import wizardURL from "../icon/wizard-svgrepo-com.svg";
 import {
   Button,
   Space,
@@ -11,11 +16,9 @@ import {
   InputNumber,
   Switch,
   ColorPicker,
-  Dropdown,
 } from "antd";
-import { CloseCircleOutlined  } from "@ant-design/icons";
-const { Text, Title } = Typography;
-
+import { CloseCircleOutlined } from "@ant-design/icons";
+const { Text } = Typography;
 function Pomodoro() {
   const [defaultWorkingTime, setDefaultWorkingTime] = useState(1500);
   const [defaultRestingTime, setDefaultRestingTime] = useState(300);
@@ -24,7 +27,7 @@ function Pomodoro() {
   const [currentStatus, setCurrentStatus] = useState("working");
   const [now, setNow] = useState(new Date());
   const [isPause, setIsPause] = useState(true);
-  const [currentTask, setCurrentTask] = useState("Time to focus!");
+  const [currentTask, setCurrentTask] = useState("");
   const [taskItems, setTaskItems] = useState([]);
   const [addTask, setAddTask] = useState(true);
   const [taskInputValue, setTaskInputValue] = useState("");
@@ -92,24 +95,49 @@ function Pomodoro() {
           width: 500,
           height: 40,
           justifyContent: "space-between",
+          marginTop:"10px"
         }}
       >
-        <Space>
-        <img src={checkedURL} style={{width:"24px", height:"24px", transform:"translateY(2px)"}}></img> 
-        <Text style={{color:"white", fontWeight:"bolder", fontSize:"24px"}}>
-          Pomodoro
-        </Text>
+        <Space direction="horizontal" style={{}}>
+          <img
+            src={checkedURL}
+            style={{
+              width: "24px",
+              height: "24px",
+              transform: "translateY(2px)",
+            }}
+          ></img>
+          <Text
+            style={{ color: "white", fontWeight: "bolder", fontSize: "24px" }}
+          >
+            Pomodoro
+          </Text>
         </Space>
         <Button
           style={{
-            backgroundColor:"rgba(255,255,255,0.2",
-            fontWeight:'bold',
-            color:'white'  
+            backgroundColor: "rgba(255,255,255,0.2)",
+            fontWeight: "bold",
+            color: "white",
+            fontSize: "16px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+
+            // transform:"translateY(-5px)"
           }}
           onClick={() => {
             setIsModalOpen(!isModalOpen);
           }}
         >
+          <img
+            src={settingURL}
+            style={{
+              width: "16px",
+              height: "16px",
+              transform: "translateY(1px)",
+              marginRight: "2px",
+            }}
+          />
           Setting
         </Button>
       </Space>
@@ -135,12 +163,12 @@ function Pomodoro() {
         }
       >
         <Space direction="vertical">
-          <Title level={3}>Setting</Title>
-          <Title level={3}>(icon) Timer</Title>
-          <Title level={4}>Time (seconds)</Title>
+          <Text style={{fontWeight:"bold"}}>
+            <img src={clockURL} style={{transform:"translateY(2px)"}}/> Timer (s)
+          </Text>
           <Space direction="horizontal">
             <Space direction="vertical">
-              <Text style={{fontSize:"16px"}}>Pomodoro</Text>
+              <Text style={{ fontSize: "14px" }}>Pomodoro</Text>
               <InputNumber
                 value={defaultWorkingTime}
                 min={0}
@@ -150,7 +178,7 @@ function Pomodoro() {
               ></InputNumber>
             </Space>
             <Space direction="vertical">
-              <Text style={{fontSize:"16px"}}>Short Break</Text>
+              <Text style={{ fontSize: "14px" }}>Short Break</Text>
               <InputNumber
                 value={defaultRestingTime}
                 min={0}
@@ -160,10 +188,12 @@ function Pomodoro() {
               ></InputNumber>
             </Space>
           </Space>
-          <Text>(Theme-icon) Theme</Text>
           <Space direction="vertical">
             <Space>
-              <Text>Color Themes:</Text>
+              <Text style={{fontWeight:"bold"}}>
+                <img src={wizardURL} style={{ transform: "translateY(2px)" }} />{" "}
+                Color Themes
+              </Text>
               <ColorPicker
                 value={pomodoroColor}
                 onChange={(e) => {
@@ -196,13 +226,14 @@ function Pomodoro() {
           width: "500px",
           height: "320px",
           borderRadius: "10px",
+          marginTop:"10px"
         }}
       >
-        <Space direction="vertical" style={{ paddingTop: "10px" }}>
+        <Space direction="vertical" style={{}}>
           <Space style={{ justifyContent: "space-evenly", width: "200px" }}>
             <Button
               type="text"
-              style={{color:"white", fontWeight:"bold", fontSize:"16px"}}
+              style={{ color: "white", fontWeight: "bold", fontSize: "16px" }}
               onClick={() => {
                 if (currentStatus !== "working") {
                   setCurrentStatus("working");
@@ -213,9 +244,9 @@ function Pomodoro() {
             >
               Pomodoro
             </Button>
-            <Button 
+            <Button
               type="text"
-              style={{color:"white", fontWeight:"bold", fontSize:"16px"}}    
+              style={{ color: "white", fontWeight: "bold", fontSize: "16px" }}
               onClick={() => {
                 if (currentStatus !== "resting") {
                   setCurrentStatus("resting");
@@ -227,14 +258,23 @@ function Pomodoro() {
               Short Break
             </Button>
           </Space>
-          
-            <Text style={{ fontSize: "120px", color:"white", fontWeight:"bold"}}>
-              {currentStatus === "working" ? workingTime : restingTime}
-            </Text>
-          
+
+          <Text
+            style={{ fontSize: "130px", color: "white", fontWeight: "bold" }}
+          >
+            {currentStatus === "working" ? workingTime : restingTime}
+          </Text>
+
           <Space>
             <Button
-              style={{color:currentStatus==="working"?pomodoroColor:shortBreakColor, fontWeight:"bold", fontSize:"28px", height:"60px", width:"188px"}}
+              style={{
+                color:
+                  currentStatus === "working" ? pomodoroColor : shortBreakColor,
+                fontWeight: "bold",
+                fontSize: "28px",
+                height: "60px",
+                width: "188px",
+              }}
               onClick={() => {
                 setIsPause(!isPause);
                 if (!isPause && isCheck && currentStatus === "working") {
@@ -262,7 +302,8 @@ function Pomodoro() {
                   }
                 }}
               >
-                <img src={forwardURL}
+                <img
+                  src={forwardURL}
                   style={{ backgroundColor: "rgba(255,255,255,0)" }}
                 />
               </Button>
@@ -274,12 +315,16 @@ function Pomodoro() {
         className="currentTask"
         style={{
           minWidth: "100%",
-          height: 100,
+          height: "30px",
           backgroundColor: "transparent",
           justifyContent: "center",
         }}
       >
-        <Text style={{fontSize:"24px", fontWeight:"bolder", color:"white"}}>{currentTask}</Text>
+        <Text
+          style={{ fontSize: "24px", fontWeight: "bolder", color: "white" }}
+        >
+          {currentTask === "" ? "Current Task" : currentTask}
+        </Text>
       </Layout>
       <Layout
         className="tasksList"
@@ -295,20 +340,35 @@ function Pomodoro() {
             display: "flex",
             justifyContent: "space-between",
             width: "500px",
-            
+            paddingBottom: "8px",
+            borderBottom: "0.5px solid rgba(255,255,255,0.6)",
           }}
         >
-          <Text style={{color:"white", fontSize:"18px", fontWeight:"bold"}}>Tasks List</Text>
-          <Text>Hi</Text>
+          <Text
+            style={{ color: "white", fontSize: "18px", fontWeight: "bold" }}
+          >
+            Tasks List
+          </Text>
+          <Button
+            type="text"
+            style={{ width: "32px" }}
+            onClick={() => {
+              taskItems.length = 0;
+              setCurrentTask("");
+            }}
+          >
+            <img src={binURL} style={{ transform: "translate(-12px, 0px)" }} />
+          </Button>
         </Space>
         {taskItems.map((item, idx) => (
           <div
             style={{
-              border: "1px solid black", 
-              width: "500px", 
-              marginTop:"12px", 
-              backgroundColor:"white"
-          }}
+              border: "1px black",
+              width: "500px",
+              marginTop: "8px",
+              backgroundColor: "white",
+              borderRadius: "4px",
+            }}
             key={idx}
             onClick={() => {
               setCurrentTask(item.name);
@@ -319,11 +379,19 @@ function Pomodoro() {
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                height:"36px",
-                borderRadius:"4px"
+                height: "36px",
+                borderRadius: "4px",
               }}
             >
-              <Text style={{color:"black", fontWeight:"bold"}}>{item.name}</Text>
+              <Text
+                style={{
+                  color: "black",
+                  fontWeight: "500",
+                  marginLeft: "11px",
+                }}
+              >
+                {item.name}
+              </Text>
               <Button
                 type="text"
                 style={{ float: "right" }}
@@ -337,34 +405,41 @@ function Pomodoro() {
                   setTaskItems(arr);
                 }}
               >
-                <CloseCircleOutlined/>
+                <CloseCircleOutlined style={{ width: "4px" }} />
               </Button>
             </Space>
           </div>
         ))}
         {addTask ? (
           <Button
-            style={{
-              color:"white", 
-              borderRadius:"8px", 
-              height:"64px", 
-              width:'500px', 
-              backgroundColor:"rgba(0,0,0,0.1)", 
-              fontWeight:"bold", 
-              opacity:"0.8",
-              border:"0.8px dashed"
-            }}
             type="text"
+            style={{
+              color: "white",
+              borderRadius: "8px",
+              height: "64px",
+              width: "500px",
+              backgroundColor: "rgba(0,0,0,)",
+              fontWeight: "bold",
+              opacity: "0.8",
+              border: "0.8px dashed",
+              marginTop: "8px",
+            }}
             onClick={() => {
               setAddTask(!addTask);
             }}
           >
+            <img
+              src={addTaskURL}
+              style={{
+                transform: "translate3d(-2px,2px,0px)",
+              }}
+            />
             Add Task
           </Button>
         ) : (
           <Space direction="vertical">
             <Input
-              style={{width:"500px"}}
+              style={{ width: "500px", marginTop: "6px" }}
               placeholder="What are you doing today?"
               autoFocus={true}
               type="text"
@@ -387,26 +462,30 @@ function Pomodoro() {
                 setTaskInputValue("");
               }}
             ></Input>
-            <Button
-              onClick={() => {
-                setAddTask(!addTask);
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={() => {
-                if (taskInputValue === "") return;
-                let arr = [...taskItems];
-                const newItem = { name: taskInputValue };
-                arr.push(newItem);
-                setTaskItems(arr);
-                setAddTask(!addTask);
-                setTaskInputValue("");
-              }}
-            >
-              Create
-            </Button>
+            <Space>
+              <Button
+                onClick={() => {
+                  setAddTask(!addTask);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="primary"
+                style={{ background: "#000000", color: "white" }}
+                onClick={() => {
+                  if (taskInputValue === "") return;
+                  let arr = [...taskItems];
+                  const newItem = { name: taskInputValue };
+                  arr.push(newItem);
+                  setTaskItems(arr);
+                  setAddTask(!addTask);
+                  setTaskInputValue("");
+                }}
+              >
+                Create
+              </Button>
+            </Space>
           </Space>
         )}
       </Layout>
