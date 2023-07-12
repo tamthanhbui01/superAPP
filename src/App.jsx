@@ -61,7 +61,7 @@ function App() {
               ]}
             />
           </Sider>
-          <Content>
+          <Content >
             <Routes>
               <Route path="/HelloWorld" element={<HelloWorld />} />
               <Route path="/Chessboard" element={<Chessboard />} />
