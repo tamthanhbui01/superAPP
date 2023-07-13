@@ -1,103 +1,232 @@
-import './Calculator.css'
-import {useState} from 'react'
-import Display from './Display'
-import CalcButton from './CalcButton'
-let operands = [];
-let _operator = null;
+import { useState } from "react";
+import backgroundJPG from "../../public/icon/CalcBG.jpg";
+import { Button } from "antd";
+import backURL from "../../public/icon/back.svg";
+import divideURL from "../../public/icon/divide.svg";
+import multiplyURL from "../../public/icon/multiply.svg";
+import "./Calculator.css";
+let arr = [];
 function Calculator() {
-  const [displayValue , setDisplayValue] = useState("")
-  const [displayResult, setDisplayResult] = useState("")
-  function numberButtonClick(v) {
-    setDisplayValue(`${displayValue}${v}`)
-  }
-  function evaluate(operands, operator) {
-    if (operands.length < 2 || operator === null) {
-      // eslint-disable-next-line no-undef
-      throw new Error(`khoong du thong tin`);
+  const [input, setInput] = useState("");
+  const [result, setResult] = useState("");
+  const [currentOp, setCurrentOp] = useState("");
+
+  const handleNumber = (e) => {
+    setInput(input + e);
+  };
+  const handleOperator = (e) => {
+    if (arr.length === 0) {
+      setCurrentOp(e);
+      arr.push(+input);
+      setInput("");
+    } else if (arr.length === 1) {
+      arr.push(+input);
+      let result = evaluate();
+      arr.length = 0;
+      arr.push(+result);
+      setCurrentOp(e);
+      setInput("");
+      setResult(+result);
+    } else {
+      return;
     }
-    switch(operator) {
-      case '+':
-        return operands[0] + operands[1];
-      case '-':
-        return operands[0] - operands[1];
-      case '*':
-        return operands[0] * operands[1];
-      case '/':
-        return operands[0] / operands[1];
+  };
+  const evaluate = () => {
+    switch (currentOp) {
+      case "+":
+        return +arr[0] + +arr[1];
+      case "-":
+        return +arr[0] - +arr[1];
+      case "x":
+        return +arr[0] * +arr[1];
+      case "/":
+        return +arr[0] / +arr[1];
     }
-  }
-  function signButtonClick() {
-    let newValue = +displayValue * (-1);
-    setDisplayValue(newValue);
-  }
-  function equalButtonClick() {
-    operands.push(+displayValue);
-    let result = evaluate(operands, _operator);
-    operands.length = 0;
-    operands.push(+result);
-    setDisplayValue("");
-    setDisplayResult(result);
-  }
-  function operatorButtonClick(operator) {
-    console.log(operator)
-    if (operands.length < 1) {
-      _operator = operator;
-      operands.push(+displayValue);
-      setDisplayValue("")
-    }
-    else if (operands.length < 2) {
-      operands.push(+displayValue);
-      let result = evaluate(operands, _operator);
-      operands.length = 0;
-      operands.push(+result);
-      _operator = operator;
-      setDisplayValue("");
-      setDisplayResult(result);
-    }
-    else {
-      // eslint-disable-next-line no-undef
-      throw new Error("Khong the xay ra")
-    }
-  }
-  const buttons = [
-    {value: 'AC', onClick: () => { 
-      setDisplayValue("");
-      setDisplayResult("");
-      _operator = null;
-      operands.length = 0;
-    }}, 
-    {value: 1, onClick: () => numberButtonClick(1)}, 
-    {value: 2, onClick: () => numberButtonClick(2)}, 
-    {value: "Back", label: '\u2190', onClick: () => setDisplayValue(`${displayValue}`.slice(0,-1))},
-    {value: 3, onClick: () => numberButtonClick(3)}, 
-    {value: 4, onClick: () => numberButtonClick(4)}, 
-    {value: 5, onClick: () => numberButtonClick(5)}, 
-    {value: "+", onClick: () => operatorButtonClick('+')},
-    {value: 6, onClick: () => numberButtonClick(6)}, 
-    {value: 7, onClick: () => numberButtonClick(7)}, 
-    {value: 8, onClick: () => numberButtonClick(8)}, 
-    {value: "-", onClick: () => operatorButtonClick('-')},
-    {value: 9, onClick: () => numberButtonClick(9)}, 
-    {value: 0, onClick: () => numberButtonClick(0)}, 
-    {value: '+/-', onClick: signButtonClick}, 
-    {value: "*", label: '\u00D7', onClick: () => operatorButtonClick('*')},
-    {value: '=', weight: 3, onClick: equalButtonClick }, 
-    {value: '/', label: "\u00F7", onClick: () => operatorButtonClick('/')}
-  ]
+  };
+  const equalClick = () => {
+    arr.push(+input);
+    let result = evaluate();
+    arr.length = 0;
+    arr.push(+result);
+    setInput("");
+    setResult(+result);
+  };
   return (
-    <div className='Calculator'>
-      <Display value={displayValue} result={displayResult} />
-      <div>{/* Buttons go here */
-        buttons.map(
-          (b, idx) => <CalcButton 
-            key={idx} 
-            value={b.value} 
-            label={b.label}
-            onClick={b.onClick}
-            weight={b.weight} />
-        )
-      }</div>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
+        backgroundImage: `url("${backgroundJPG}")`,
+      }}
+    >
+      <div
+        className="Calculator"
+        style={{
+          border: "1px solid white",
+          borderRadius: 12,
+          width: 300,
+          height: 370,
+          background: "gray",
+        }}
+      >
+        <div className="Display">
+          <div
+            className="input"
+            style={{
+              width: 280,
+              height: 50,
+              backgroundColor: "white",
+              marginLeft: 10,
+              marginTop: 10,
+              color:'orange',
+              fontWeight:'bold'
+            }}
+          >
+            {input}
+          </div>
+          <div
+            className="result"
+            style={{
+              width: 280,
+              height: 50,
+              background: "white",
+              color: "red",
+              marginLeft: 10,
+              alignItems: "end",
+              textAlign: "right",
+              fontWeight:'bolder'
+            }}
+          >
+            {result}
+          </div>
+        </div>
+        <div
+          className="Button"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "auto auto auto auto",
+            padding: 10,
+          }}
+        >
+          <Button
+            onClick={() => {
+              handleNumber(1);
+            }}
+          >
+            1
+          </Button>
+          <Button
+            onClick={() => {
+              handleNumber(2);
+            }}
+          >
+            2
+          </Button>
+          <Button
+            onClick={() => {
+              handleNumber(3);
+            }}
+          >
+            3
+          </Button>
+          <Button
+            onClick={() => {
+              handleNumber(4);
+            }}
+          >
+            4
+          </Button>
+          <Button
+            onClick={() => {
+              handleNumber(5);
+            }}
+          >
+            5
+          </Button>
+          <Button
+            onClick={() => {
+              handleNumber(6);
+            }}
+          >
+            6
+          </Button>
+          <Button
+            onClick={() => {
+              handleNumber(7);
+            }}
+          >
+            7
+          </Button>
+          <Button
+            onClick={() => {
+              handleNumber(8);
+            }}
+          >
+            8
+          </Button>
+          <Button
+            onClick={() => {
+              handleNumber(9);
+            }}
+          >
+            9
+          </Button>
+          <Button
+            onClick={() => {
+              handleOperator("+");
+            }}
+          >
+            +
+          </Button>
+          <Button
+            onClick={() => {
+              handleOperator("-");
+            }}
+          >
+            -
+          </Button>
+          <Button
+            onClick={() => {
+              handleOperator("x");
+            }}
+          >
+            <img src={multiplyURL} />
+          </Button>
+          <Button
+            onClick={() => {
+              handleOperator("/");
+            }}
+          >
+            <img src={divideURL} />
+          </Button>
+          <Button
+            onClick={() => {
+              setInput(input.slice(0, -1));
+            }}
+          >
+            <img src={backURL} />
+          </Button>
+          <Button
+            onClick={() => {
+              equalClick();
+            }}
+          >
+            =
+          </Button>
+          <Button
+            onClick={() => {
+              setInput("");
+              setResult("");
+              arr.length = 0;
+            }}
+          >
+            AC
+          </Button>
+        </div>
+      </div>
     </div>
-  )
+  );
 }
-export default Calculator
+export default Calculator;

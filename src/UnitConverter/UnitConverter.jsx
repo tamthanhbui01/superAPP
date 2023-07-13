@@ -1,14 +1,14 @@
 import { useState } from "react";
-import "./UnitConverter.css";
-import Label from "./Label";
-import { InputNumber } from "antd";
+import { InputNumber, Typography,Space } from "antd";
+const {Text} = Typography
 function App() {
   const [VND, setVND] = useState(0);
   const [USD, setUSD] = useState(0);
 
   return (
-    <>
-      <Label name={"From: "}></Label>
+    <div style={{minWidth:'100%',height:'80vh',display:"flex", justifyContent:'center', alignItems:'center'}}>
+      <Space direction="vertical">
+      <Text >From: VND </Text>
       <InputNumber
         style={{
           width: 500,
@@ -20,7 +20,7 @@ function App() {
           setUSD(value / 22000);
         }}
       />
-      <Label name="To: "></Label>
+      <Text >To: USD </Text>
       <InputNumber
         style={{
           width: 500,
@@ -29,7 +29,8 @@ function App() {
         value={USD}
         readOnly={true}
       />
-    </>
+      </Space>
+    </div>
   );
 }
 

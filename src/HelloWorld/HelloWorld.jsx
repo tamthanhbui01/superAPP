@@ -1,13 +1,15 @@
 import { useState } from "react";
-import { Button, Space } from "antd";
-
+import { Button, Space, Typography } from "antd";
+const {Text} = Typography
 function HelloWorld() {
   const [store, setStore] = useState([]);
 
   return (
     <>
-      <Space>
+      <div style={{display:'flex', justifyContent:'center', alignItems:'center', marginTop:10}}>
+      <Space >
         <Button
+          
           onClick={() => {
             let arr = [...store];
             arr.push("");
@@ -27,9 +29,12 @@ function HelloWorld() {
           Remove me
         </Button>
       </Space>
+      </div>
+      <div style={{display:'flex', justifyContent:'center', alignItems:'center', flexDirection:'column', marginTop:10}}>
       {store.map((_, idx) => (
-        <div key={idx}>Hello World</div>
+        <Text style={{fontWeight:'bold'}} type="success" key={idx}>Hello World</Text>
       ))}
+      </div>
     </>
   );
 }

@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import checkedURL from "../icon/check-circle-svgrepo-com.svg";
-import forwardURL from "../icon/forward-end-fill-svgrepo-com.svg";
-import settingURL from "../icon/setting-2-svgrepo-com.svg";
-import addTaskURL from "../icon/plus-circle-svgrepo-com.svg";
-import binURL from "../icon/bin-svgrepo-com.svg";
-import clockURL from "../icon/clock-3-svgrepo-com.svg";
-import wizardURL from "../icon/wizard-svgrepo-com.svg";
+import checkedURL from "../../public/icon/check-circle-svgrepo-com.svg";
+import forwardURL from "../../public/icon/forward-end-fill-svgrepo-com.svg";
+import settingURL from "../../public/icon/setting-2-svgrepo-com.svg";
+import addTaskURL from "../../public/icon/plus-circle-svgrepo-com.svg";
+import binURL from "../../public/icon/bin-svgrepo-com.svg";
+import clockURL from "../../public/icon/clock-3-svgrepo-com.svg";
+import wizardURL from "../../public/icon/wizard-svgrepo-com.svg";
 import {
   Button,
   Space,
@@ -422,6 +422,7 @@ function Pomodoro() {
               marginTop: "8px",
               backgroundColor: "white",
               borderRadius: "4px",
+              cursor:'pointer'
             }}
             key={idx}
             onClick={() => {

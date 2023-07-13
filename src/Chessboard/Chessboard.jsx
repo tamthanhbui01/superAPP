@@ -5,7 +5,7 @@ import { ColorPicker, InputNumber, Space,Typography } from "antd";
 const{Text} = Typography
 function App() {
   const [chessBoard, setChessBoard] = useState([]);
-  const [size, setSize] = useState(0);
+  const [size, setSize] = useState(8);
   const [color, setColor] = useState({
     colorOdd: "#f6ffe3",
     colorEven: "#5d9948",
